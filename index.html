@@ -8,7 +8,6 @@
 <link rel="icon" type="image/svg+xml" href="./icon.svg">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <link rel="manifest" href="./manifest.webmanifest">
-
 <style>
 *{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;font-family:Arial,sans-serif;background:#879198;color:#fff}
 #wrap{position:relative;width:min(100vw,56.25vh);height:min(100vh,177.78vw);max-width:520px;max-height:920px;margin:auto;overflow:hidden;background:#aeb8bd}
@@ -27,10 +26,27 @@ input{width:100%;padding:13px;border-radius:10px;border:0;font-size:17px;text-al
 #toast{position:absolute;top:23%;width:100%;font-size:22px;font-weight:bold;text-shadow:0 2px 5px #000;opacity:0;pointer-events:none}
 .row{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ffffff44;padding:8px 0;font-size:14px}
 .row button{width:105px;margin:0;padding:9px}
-#newsOpen{position:absolute;bottom:8px;left:8%;width:84%;padding:10px;margin:0;background:#26343bdd;color:#fff;border:1px solid #ffffff77;box-shadow:none}
-#newsPanel{z-index:5;background:#26343bee}
-.shopGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.shopItem{padding:10px 6px;background:#ffffff18;border:1px solid #ffffff33;border-radius:12px;font-size:13px}.shopItem button{padding:8px;margin:6px 0 0;font-size:12px}
-#flightInfo{position:absolute;top:92px;left:0;right:0;text-align:center;font-weight:bold;text-shadow:0 2px 5px #000;pointer-events:none;color:#fff2a6;font-size:15px}
+
+#menu{justify-content:flex-start;padding-top:8vh}
+#menu .panel{position:relative;margin-top:12px;padding:18px 20px 20px}
+.menu-actions{display:flex;flex-direction:column;gap:2px}
+.menu-corner{position:absolute!important;bottom:14px;width:auto!important;min-width:112px;padding:10px 13px!important;font-size:12px!important;margin:0!important}
+#donateBtn{left:12px;background:linear-gradient(#ffcf8a,#f28c45);color:#512b12}
+#newsBtn{right:12px}
+#shop{overflow-y:auto;justify-content:flex-start;padding-top:20px;padding-bottom:20px}
+#shop .panel{width:min(100%,390px);max-height:94%;overflow-y:auto}
+.shop-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:12px 0}
+.shop-tabs button{font-size:11px;padding:10px 4px;margin:0}
+.shop-tabs button.active{background:linear-gradient(#ffe58a,#ffb62f)}
+.shop-items{display:grid;grid-template-columns:1fr 1fr;gap:9px;text-align:left}
+.shop-card{background:#ffffff18;border:1px solid #ffffff44;border-radius:12px;padding:9px;min-width:0}
+.shop-preview{height:76px;border-radius:9px;background:linear-gradient(#d8e8ee,#8299a3);display:flex;align-items:center;justify-content:center;font-size:42px;margin-bottom:7px}
+.shop-card b{font-size:13px;display:block;min-height:30px}
+.shop-card small{display:block;color:#e3edf0;min-height:28px;font-size:11px}
+.shop-card button{font-size:12px;padding:9px 4px;margin:5px 0 0}
+#newsScreen .panel,#donateScreen .panel{width:min(100%,340px)}
+#shopBack{margin-top:12px}
+
 </style>
 </head>
 <body><div id="wrap">
@@ -38,58 +54,151 @@ input{width:100%;padding:13px;border-radius:10px;border:0;font-size:17px;text-al
 <div id="hud" class="hide"><span id="score">0 м</span><span id="coins">🪙 0</span></div>
 <button id="pause" class="hide">Ⅱ</button>
 <div id="controls" class="hide"><button class="ctrl" id="left">←</button><button class="ctrl" id="right">→</button></div>
-<div id="toast"></div><div id="flightInfo"></div>
-<section class="screen" id="menu"><h1>SKYBOUND</h1><div class="sub">ПРЫГАЙ ВЫШЕ ОБЛАКОВ</div><div class="panel"><p id="welcome">Готов к прыжку?</p><p id="bestRecord" style="margin:10px 0 16px;font-size:17px;font-weight:bold;color:#ffe58a;text-shadow:0 2px 4px #0005">🏆 РЕКОРД: 0 м</p><button class="primary" id="play">▶ ИГРАТЬ</button><button id="shopOpen">◆ МАГАЗИН</button><button id="nickOpen">✎ СДЕЛАТЬ НИК</button><div class="small">Управление: ← → или экранные кнопки</div></div><button id="newsOpen">▾ ЧТО НОВОГО</button></section>
-<section class="screen hide" id="shop"><div class="panel"><h2>МАГАЗИН</h2><p>Всего монет: <b id="shopCoins">0</b> 🪙</p><div class="shopGrid"><div class="shopItem">🟦 Джампер «Лазурный»<br>60 🪙<button id="buyBlue">Купить</button></div><div class="shopItem">🟥 Джампер «Рубин»<br>60 🪙<button id="buyRed">Купить</button></div><div class="shopItem">🎩 Шапка<br>40 🪙<button id="buyHat">Купить</button></div><div class="shopItem">🕶 Очки<br>40 🪙<button id="buyGlasses">Купить</button></div><div class="shopItem">⚪ Серый след<br>20 🪙<button id="buyGray">Купить</button></div><div class="shopItem">✨ Золотой след<br>50 🪙<button id="buyGold">Купить</button></div><div class="shopItem">💠 Неоновый след<br>100 🪙<button id="buyNeon">Купить</button></div><div class="shopItem">💜 Фиолетовый след<br>80 🪙<button id="buyPurple">Купить</button></div></div><p class="small">Купленные предметы можно выбирать повторно бесплатно.</p><button id="shopBack">НАЗАД</button></div></section>
-<section class="screen hide" id="newsPanel"><div class="panel"><h2>ЧТО НОВОГО</h2><p style="text-align:left;line-height:1.5">• Добавлены анимации ускорения вверх и вниз с показом пролетаемых платформ.<br>• Монеты появляются реже.<br>• Новый магазин джамперов, одежды и следов.<br>• Улучшен лавовый моб: он появляется чаще, меняет сторону и его снаряды заканчивают игру при попадании.</p><button id="newsBack">НАЗАД</button></div></section>
+<div id="toast"></div>
+<section class="screen" id="menu">
+<h1>SKYBOUND</h1><div class="sub">ПРЫГАЙ ВЫШЕ ОБЛАКОВ</div>
+<div class="panel"><p id="welcome">Готов к прыжку?</p><p class="small" style="font-size:14px;font-weight:bold;color:#ffe58a;margin:8px 0 12px">Вас приветствует Кулешов Д.Ф. в своей игре!!! Делитесь своим рекордом и скинами!!!</p><p id="bestRecord" style="margin:10px 0 16px;font-size:17px;font-weight:bold;color:#ffe58a;text-shadow:0 2px 4px #0005">🏆 РЕКОРД: 0 м</p>
+<div class="menu-actions"><button class="primary" id="play">▶ ИГРАТЬ</button><button id="shopOpen">◆ МАГАЗИН</button><button id="nickOpen">✎ СМЕНИТЬ НИК</button><button id="settingsOpen">⚙ НАСТРОЙКИ</button></div>
+<div class="small">Управление: ← → или экранные кнопки</div></div>
+<button class="menu-corner" id="donateBtn">♥ ПОЖЕРТВОВАТЬ</button><button class="menu-corner" id="newsBtn">✦ ЧТО НОВОГО</button></section>
+<section class="screen hide" id="shop"><div class="panel"><h2>МАГАЗИН</h2><p>Всего монет: <b id="shopCoins">0</b> 🪙</p>
+<div class="shop-tabs"><button class="active" data-tab="costumes">КОСТЮМЫ</button><button data-tab="accessories">АКСЕССУАРЫ</button><button data-tab="trails">СЛЕДЫ</button></div>
+<div class="shop-items" id="shopItems"></div><p class="small">Купленные вещи можно надевать и снимать. Внешний вид не влияет на характеристики.</p><button id="shopBack">НАЗАД</button></div></section>
+<section class="screen hide" id="settingsScreen"><div class="panel"><h2>НАСТРОЙКИ ЗВУКА</h2>
+<div class="row"><label for="musicVolume">Музыка главного экрана</label><b id="musicValue">60%</b></div>
+<input id="musicVolume" type="range" min="0" max="100" value="60" style="padding:0;accent-color:#ffd15b">
+<div class="row"><label for="sfxVolume">Звуковые эффекты</label><b id="sfxValue">70%</b></div>
+<input id="sfxVolume" type="range" min="0" max="100" value="70" style="padding:0;accent-color:#ffd15b">
+<p class="small">Настройки сохраняются автоматически.</p><button id="settingsBack">НАЗАД</button></div></section>
+<section class="screen hide" id="newsScreen"><div class="panel"><h2>ЧТО НОВОГО</h2><p>✨ Новые костюмы и аксессуары для джампера</p><p>🐉 Эндр-дракон в Minecraft-мире</p><p>🎵 Спокойная мелодия в главном меню</p><p>🚀 Обновлённые пружина и ракета</p><button id="newsBack">НАЗАД</button></div></section>
+<section class="screen hide" id="donateScreen"><div class="panel"><h2>ПОЖЕРТВОВАНИЕ</h2><p style="font-size:24px;font-weight:bold;color:#ffe58a">В РАЗРАБОТКЕ</p><button id="donateBack">НАЗАД</button></div></section>
 <section class="screen hide" id="nick"><div class="panel"><h2>ТВОЙ НИК</h2><input id="nickInput" maxlength="14" placeholder="Введи ник"><button class="primary" id="saveNick">СОХРАНИТЬ</button><button id="nickBack">НАЗАД</button></div></section>
 <section class="screen hide" id="pauseScreen"><div class="panel"><h2>ПАУЗА</h2><button class="primary" id="resume">ПРОДОЛЖИТЬ</button><button id="toMenu">В МЕНЮ</button></div></section>
 <section class="screen hide" id="over"><div class="panel"><h2>ИГРА ОКОНЧЕНА</h2><p id="result"></p><button class="primary" id="again">↻ ЕЩЁ РАЗ</button><button id="overMenu">В МЕНЮ</button></div></section>
 </div>
 <script>
 (()=>{
-const c=document.getElementById('c'),x=c.getContext('2d'),W=450,H=800,$=id=>document.getElementById(id);
-const screens=['menu','shop','newsPanel','nick','pauseScreen','over'];
-let player,plats=[],cam=0,score=0,playing=false,paused=false,keys={l:false,r:false},biome='normal',toast=0,last=0,runCoins=0,mob=null,fireballs=[];
-let coins=+(localStorage.skyCoins||0),nick=localStorage.skyNick||'Игрок',best=+(localStorage.skyBest||0);
-let boost=null,flightPassed=0,mobCooldown=0,mobSide=0,explosion=null,deathTimer=0;
+let storage;
+ try { storage=window.localStorage; const testKey='__skybound_test__'; storage.setItem(testKey,'1'); storage.removeItem(testKey); }
+ catch(e) { storage={}; }
+ const c=document.getElementById('c'),x=c.getContext('2d'),W=450,H=800,$=id=>document.getElementById(id);
+const screens=['menu','shop','nick','pauseScreen','over','newsScreen','donateScreen','settingsScreen'];
+let player,plats=[],cam=0,score=0,playing=false,paused=false,keys={l:false,r:false},biome='normal',toast=0,last=0,runCoins=0,mob=null,fireballs=[],lastMobSpawnScore=-9999,loopId=0,rafPending=false;
+let coins=+(storage.skyCoins||0),nick=storage.skyNick||'Игрок',best=+(storage.skyBest||0);
+let dragon=null, menuAudio=null, musicTimer=null, musicStarted=false, musicGain=null, sfxGain=null;
+let musicVolume=Number(storage.skyMusicVolume ?? 60)/100;
+ const inventory={
+  costumes:[
+   {id:'starter',name:'Исследователь',icon:'🧑',desc:'Стандартный костюм',price:0},
+   {id:'formal',name:'Классика',icon:'🤵',desc:'Белая рубашка и галстук',price:35},
+   {id:'sport',name:'Спорт',icon:'🏃',desc:'Спортивная форма',price:50},
+   {id:'army',name:'Следопыт',icon:'🪖',desc:'Камуфляжный костюм',price:70},
+   {id:'steve',name:'Блочный герой',icon:'🟦',desc:'Костюм в стиле Minecraft',price:100}
+  ],
+  accessories:[
+   {id:'glasses',name:'Очки',icon:'🕶️',desc:'Стильные очки',price:25},
+   {id:'cap',name:'Кепка',icon:'🧢',desc:'Красная кепка',price:30},
+   {id:'crown',name:'Корона',icon:'👑',desc:'Королевский аксессуар',price:90},
+   {id:'scarf',name:'Шарф',icon:'🧣',desc:'Яркий шарф',price:45}
+  ],
+  trails:[
+   {id:'trail',name:'Серый след',icon:'〰️',desc:'Классический след',price:20},
+   {id:'gold',name:'Золотой след',icon:'✨',desc:'Золотое свечение',price:55},
+   {id:'fire',name:'Огненный след',icon:'🔥',desc:'Пылающий след',price:65},
+   {id:'ice',name:'Ледяной след',icon:'❄️',desc:'Холодное свечение',price:65},
+   {id:'rainbow',name:'Радужный след',icon:'🌈',desc:'Меняющийся цвет',price:120},
+   {id:'neon',name:'Неоновый след',icon:'💠',desc:'Неоновое свечение',price:80},
+   {id:'shadow',name:'Теневой след',icon:'🌑',desc:'Фиолетовый след',price:80},
+   {id:'leaf',name:'Зелёный след',icon:'🍃',desc:'Зелёное свечение',price:45}
+  ]
+ };
+ function owned(id){return id==='starter'||storage['skyOwn_'+id]==='1'}
+ function equipped(id){return storage['skyWear_'+id]==='1'}
+let sfxVolume=Number(storage.skySfxVolume ?? 70)/100;
+function audioContext(){
+ if(!menuAudio && (window.AudioContext||window.webkitAudioContext)){
+  menuAudio=new (window.AudioContext||window.webkitAudioContext)();
+  musicGain=menuAudio.createGain();musicGain.gain.value=musicVolume;
+  musicGain.connect(menuAudio.destination);
+  sfxGain=menuAudio.createGain();sfxGain.gain.value=sfxVolume;
+  sfxGain.connect(menuAudio.destination);
+ }
+ if(menuAudio && menuAudio.state==='suspended')menuAudio.resume();
+ return menuAudio;
+}
+function startMenuMusic(){
+ if(musicStarted || document.hidden || ($('menu').classList.contains('hide') && $('settingsScreen').classList.contains('hide')))return;
+ try{
+  const ac=audioContext();if(!ac)return;
+  musicStarted=true;
+  musicGain.gain.setTargetAtTime(musicVolume,menuAudio.currentTime,.03);
+  const notes=[392,493.88,587.33,493.88,440,523.25,659.25,587.33,392,493.88,587.33,783.99];
+  let index=0;
+  const playNote=()=>{
+   if(!musicStarted||!menuAudio||document.hidden)return;
+   const now=menuAudio.currentTime;
+   const osc=menuAudio.createOscillator(),gain=menuAudio.createGain();
+   osc.type='triangle';osc.frequency.value=notes[index%notes.length];
+   gain.gain.setValueAtTime(.0001,now);
+   gain.gain.exponentialRampToValueAtTime(.055,now+.045);
+   gain.gain.exponentialRampToValueAtTime(.0001,now+.29);
+   osc.connect(gain);gain.connect(musicGain);osc.start(now);osc.stop(now+.31);
+   if(index%2===0){
+    const bass=menuAudio.createOscillator(),bg=menuAudio.createGain();
+    bass.type='square';bass.frequency.value=notes[index%notes.length]/2;
+    bg.gain.setValueAtTime(.0001,now);bg.gain.exponentialRampToValueAtTime(.018,now+.025);
+    bg.gain.exponentialRampToValueAtTime(.0001,now+.18);
+    bass.connect(bg);bg.connect(musicGain);bass.start(now);bass.stop(now+.2);
+   }
+   index++;musicTimer=setTimeout(playNote,300);
+  };playNote();
+ }catch(e){musicStarted=false}
+}
+function stopMenuMusic(){
+ musicStarted=false;if(musicTimer)clearTimeout(musicTimer);musicTimer=null;
+ if(menuAudio && musicGain){musicGain.gain.cancelScheduledValues(menuAudio.currentTime);musicGain.gain.setTargetAtTime(0,menuAudio.currentTime,.025)}
+}
+function playSfx(kind='jump'){
+ try{
+  const ac=audioContext();if(!ac||sfxVolume<=0)return;
+  sfxGain.gain.setTargetAtTime(sfxVolume,ac.currentTime,.01);
+  const now=ac.currentTime,osc=ac.createOscillator(),gain=ac.createGain();
+  const presets={jump:[420,680,.12,'square'],coin:[880,1320,.16,'sine'],spring:[300,900,.22,'triangle'],rocket:[180,760,.3,'sawtooth'],land:[240,160,.08,'triangle'],click:[520,420,.06,'sine'],hit:[160,70,.24,'sawtooth']};
+  const a=presets[kind]||presets.jump;
+  osc.type=a[3];osc.frequency.setValueAtTime(a[0],now);osc.frequency.exponentialRampToValueAtTime(a[1],now+a[2]);
+  gain.gain.setValueAtTime(.0001,now);gain.gain.exponentialRampToValueAtTime(.22,now+.012);gain.gain.exponentialRampToValueAtTime(.0001,now+a[2]);
+  osc.connect(gain);gain.connect(sfxGain);osc.start(now);osc.stop(now+a[2]+.02);
+ }catch(e){}
+}
 const rand=(a,b)=>Math.random()*(b-a)+a,clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
-function screen(id){screens.forEach(s=>$(s).classList.toggle('hide',s!==id))}
+function screen(id){screens.forEach(s=>$(s).classList.toggle('hide',s!==id));if((id==='menu'||id==='settingsScreen')&&!document.hidden)startMenuMusic();else stopMenuMusic()}
 function menuInfo(){$('welcome').textContent=nick+', готов к прыжку?';$('bestRecord').textContent='🏆 РЕКОРД: '+best+' м';$('shopCoins').textContent=coins;$('coins').textContent='🪙 '+runCoins}
 function say(t){$('toast').textContent=t;$('toast').style.opacity=1;toast=1.2}
-function platform(px,py,type){return{x:px,y:py,w:type==='minecraft'?100:rand(78,98),h:17,type,dir:Math.random()<.5?-1:1,coinSpawn:Math.random()<.18,coinTaken:false,passed:false}}
+function platform(px,py,type){return{x:px,y:py,w:type==='minecraft'?100:rand(78,98),h:17,type,dir:Math.random()<.5?-1:1,coinTaken:Math.random()<0.55}}
 function randomType(){
   const r=Math.random();
-  // Обычные платформы только для прыжков — основная часть генерации.
-  // Переходы между биомами (normal/hell/minecraft) встречаются редко.
+  // Платформы смены биома редкие: в каждом биоме шанс каждой
+  // противоположной платформы около 1.2%; обычные платформы — основа.
   if(biome==='hell'){
-    if(r<.012)return 'minecraft';       // редкий переход в Minecraft
-    if(r<.032)return 'normal';          // редкий переход в обычный биом
-    if(r<.092)return 'spring';
-    if(r<.107)return 'rocket';
-    if(r<.157)return 'down';
-    if(r<.247)return 'moving';
-    return 'plain';                    // около 75% простых платформ
+    if(r<.012)return 'minecraft';
+    if(r<.042)return 'spring'; if(r<.057)return 'rocket';
+    if(r<.112)return 'down'; if(r<.232)return 'moving';
+    return 'normal';
   }
   if(biome==='minecraft'){
-    if(r<.012)return 'hell';            // редкий переход в адский биом
-    if(r<.032)return 'normal';          // редкий переход в обычный биом
-    if(r<.092)return 'spring';
-    if(r<.107)return 'rocket';
-    if(r<.157)return 'down';
-    if(r<.247)return 'moving';
-    return 'plain';
+    if(r<.012)return 'hell';
+    if(r<.042)return 'spring'; if(r<.057)return 'rocket';
+    if(r<.112)return 'down'; if(r<.232)return 'moving';
+    return 'normal';
   }
-  if(r<.012)return 'hell';              // редкий переход в адский биом
-  if(r<.032)return 'minecraft';         // редкий переход в Minecraft
-  if(r<.092)return 'spring';
-  if(r<.107)return 'rocket';
-  if(r<.157)return 'down';
-  if(r<.247)return 'moving';
-  return 'plain';
+  if(r<.012)return 'hell';
+  if(r<.024)return 'minecraft';
+  if(r<.054)return 'spring'; if(r<.069)return 'rocket';
+  if(r<.124)return 'down'; if(r<.244)return 'moving';
+  return 'normal';
 }
 function gen(){
-  plats=[platform(175,735,'plain')];
+  plats=[platform(175,735,'normal')];
   let y=650,prevX=175;
   while(y>-5200){
     y-=rand(58,72);
@@ -98,49 +207,45 @@ function gen(){
     plats.push(platform(px,y,t)); prevX=px;
   }
 }
-function start(){biome='normal';gen();cam=0;score=0;runCoins=0;mob=null;fireballs=[];boost=null;flightPassed=0;mobCooldown=rand(5,9);mobSide=0;explosion=null;deathTimer=0;player={x:208,y:670,w:34,h:42,vy:-8.5};playing=true;paused=false;$('hud').classList.remove('hide');$('controls').classList.remove('hide');$('pause').classList.remove('hide');screens.forEach(s=>$(s).classList.add('hide'));last=performance.now();requestAnimationFrame(loop)}
-function finish(){playing=false;boost=null;explosion=null;$('flightInfo').textContent='';$('hud').classList.add('hide');$('controls').classList.add('hide');$('pause').classList.add('hide');best=Math.max(best,Math.floor(score));localStorage.skyBest=best;$('result').textContent=`Результат: ${Math.floor(score)} м · Рекорд: ${best} м`;screen('over')}
+function start(){
+  stopMenuMusic();loopId++;rafPending=false;biome='normal';gen();cam=0;score=0;runCoins=0;mob=null;fireballs=[];dragon=null;
+  player={x:208,y:670,w:34,h:42,vy:-8.5};playing=true;paused=false;keys.l=false;keys.r=false;
+  $('hud').classList.remove('hide');$('controls').classList.remove('hide');$('pause').classList.remove('hide');
+  screens.forEach(s=>$(s).classList.add('hide'));lastMobSpawnScore=-9999;last=performance.now();scheduleLoop(loopId);
+ }
+function finish(){playing=false;paused=false;loopId++;rafPending=false;keys.l=false;keys.r=false;$('hud').classList.add('hide');$('controls').classList.add('hide');$('pause').classList.add('hide');best=Math.max(best,Math.floor(score));storage.skyBest=best;$('result').textContent=`Результат: ${Math.floor(score)} м · Рекорд: ${best} м`;screen('over')}
 function hit(p, previousBottom){
   let bottom=player.y+player.h;
-  if(boost || player.vy<=0) return;
-  if(previousBottom<=p.y+3 && bottom>=p.y && player.x+player.w>p.x+4 && player.x<p.x+p.w-4){
-    if(p.type==='hell'){biome='hell';say('АДСКИЙ БИОМ!');}
-    else if(p.type==='minecraft'){biome='minecraft';say('МИР MINECRAFT!');}
-    else if(p.type==='normal'){biome='normal';}
+  if(player.vy<=0) return;
+  if(previousBottom<=p.y+3 && bottom>=p.y &&
+     player.x+player.w>p.x+4 && player.x<p.x+p.w-4){
+    // Биом меняют ТОЛЬКО специальные платформы биомов.
+    // Обычная чёрная платформа (normal), а также spring/rocket/down/moving
+    // никогда не меняют текущий биом.
     switch(p.type){
-      case 'spring': beginBoost('up',1500,-27.5,'ПРУЖИНА!'); break;
-      case 'rocket': beginBoost('up',3000,-39,'РАКЕТА!'); break;
-      case 'down': beginBoost('down',150,22,'УСКОРЕНИЕ ВНИЗ!'); score=Math.max(0,score-2000); break;
-      default: player.vy=-12.5;
+      case 'hell':
+        biome='hell'; say('АДСКИЙ БИОМ!'); break;
+      case 'minecraft':
+        biome='minecraft'; say('МИР MINECRAFT!'); break;
+    }
+    switch(p.type){
+      case 'spring': player.vy=-27.5; playSfx('spring'); say('ПРУЖИНА!'); break;
+      case 'rocket': player.vy=-39; playSfx('rocket'); say('РАКЕТА!'); break;
+      case 'down': player.vy=-12.5; score=Math.max(0,score-150); say('УСКОРИТЕЛЬ ВНИЗ! −150 м'); break;
+      default: player.vy=-12.5; playSfx('land');
     }
   }
 }
-function beginBoost(direction,distance,velocity,label){
-  flightPassed=0;for(let p of plats)p.passed=false;
-  boost={direction,distance,remaining:distance,velocity,label,passed:0};
-  player.vy=velocity;
-  say(label);
-}
-
 function update(dt){
   if(!playing||paused)return;
   let k=Math.min(dt,.032)*60;
-  if(deathTimer>0){deathTimer-=dt;if(explosion)explosion.age+=dt;if(deathTimer<=0)finish();return;}
   player.vx=keys.l?-5.2:keys.r?5.2:0;
   player.x+=player.vx*k;
   if(player.x<-player.w)player.x=W;
   if(player.x>W)player.x=-player.w;
   const previousBottom=player.y+player.h;
-  if(boost){
-    let step=Math.min(boost.remaining,Math.abs(boost.velocity*k));
-    let dy=boost.direction==='up'?-step:step;
-    let oldY=player.y;player.y+=dy;boost.remaining-=step;
-    let low=Math.min(oldY,player.y),high=Math.max(oldY,player.y);
-    for(let p of plats){if(!p.passed && p.y>=low-5 && p.y<=high+player.h+5){p.passed=true;flightPassed++;boost.passed++;}}
-    player.vy=boost.direction==='up'?boost.velocity:boost.velocity;
-    $('flightInfo').textContent=(boost.direction==='up'?'⬆ УСКОРЕНИЕ · ':'⬇ ПАДЕНИЕ · ')+flightPassed+' платформ пролетело';
-    if(boost.remaining<=0){let dir=boost.direction;boost=null;player.vy=dir==='up'?-9:8;$('flightInfo').textContent='';}
-  }else{player.vy+=.25*k;player.y+=player.vy*k;} 
+  player.vy+=.25*k;
+  player.y+=player.vy*k;
 
   for(let p of plats){
     if(p.type==='moving'){
@@ -148,12 +253,12 @@ function update(dt){
       if(p.x<5||p.x+p.w>W-5)p.dir*=-1;
     }
     hit(p,previousBottom);
-    if(p.coinSpawn&&!p.coinTaken){
+    if(!p.coinTaken){
       let cx=p.x+p.w/2, cy=p.y-25;
       if(player.x+player.w>cx-11 && player.x<cx+11 &&
          player.y+player.h>cy-11 && player.y<cy+11){
-        p.coinTaken=true; coins++;runCoins++;
-        localStorage.skyCoins=coins;menuInfo();say('+1 МОНЕТА');
+        p.coinTaken=true; coins++;runCoins++;playSfx('coin');
+        storage.skyCoins=coins;menuInfo();say('+1 МОНЕТА');
       }
     }
   }
@@ -172,23 +277,43 @@ function update(dt){
     plats.push(platform(px,top,t));prevX=px;
   }
 
-  // Лавовый моб чаще появляется в адском биоме и чередует стороны.
-  if(biome==='hell' && score>=500 && !mob && deathTimer<=0){
-    mobCooldown-=dt;
-    if(mobCooldown<=0){mobSide=1-mobSide;mob={x:mobSide===0?18:W-18,y:player.y-250,side:mobSide,active:true,shot:rand(.5,1.1)};fireballs=[];mobCooldown=rand(7,11);}
+  // Моб появляется чаще и почти у верхнего края экрана, чтобы игрок видел его заранее.
+  // Повторный спавн разрешён после паузы в 420 очков высоты.
+  if(biome==='hell' && score>=500 && (!mob || !mob.active) && score-lastMobSpawnScore>=420){
+    mob={y:cam+58,active:true};
+    lastMobSpawnScore=score;
+    fireballs=[];
+    fireballs.push({x:48,y:mob.y+18,vx:2.0,r:10});
   }
   if(mob && mob.active){
-    mob.shot-=dt;
-    if(mob.shot<=0){let dir=player.x+player.w/2>mob.x?1:-1;fireballs.push({x:mob.x,y:mob.y+15,vx:dir*3.1,r:12});mob.shot=rand(1.4,2.2);}
-    for(let f of fireballs){
-      f.x+=f.vx*k;
-      let dx=(player.x+player.w/2)-f.x,dy=(player.y+player.h/2)-f.y;
-      if(dx*dx+dy*dy<(f.r+17)*(f.r+17) && deathTimer<=0){
-        explosion={x:f.x,y:f.y,age:0};deathTimer=.42;fireballs=[];say('ВЗРЫВ! ИГРА ОКОНЧЕНА');break;
+    // Моб прекращает атаку, когда игрок перепрыгнул его высоту.
+    if(player.y+player.h<mob.y-35){
+      mob.active=false;fireballs=[];
+    }else{
+      // Первый шар выпускается сразу при появлении моба.
+      if(!fireballs.length)fireballs.push({x:48,y:mob.y+18,vx:2.0,r:10});
+      for(let f of fireballs){
+        f.x+=f.vx*k;
+        let dx=(player.x+player.w/2)-f.x,dy=(player.y+player.h/2)-f.y;
+        if(dx*dx+dy*dy<(f.r+16)*(f.r+16)){
+          player.vy=Math.max(player.vy,5.5);
+          f.x=W+100;say('УВОРАЧИВАЙСЯ!');
+        }
       }
+      fireballs=fireballs.filter(f=>f.x<W+20);
     }
-    fireballs=fireballs.filter(f=>f.x>-30&&f.x<W+30);
-    if(player.y+player.h<mob.y-120){mob.active=false;fireballs=[];mob=null;}
+  }
+
+
+  if(biome==='minecraft'&&score>=350&&!dragon){
+    const fromLeft=Math.random()<.5;
+    dragon={x:fromLeft?-100:W+100,y:player.y+rand(120,430),vx:fromLeft?rand(2.25,3.35):-rand(2.25,3.35),vy:-rand(1.35,2.2),phase:0};
+  }
+  if(dragon){
+    dragon.x+=dragon.vx*k;dragon.y+=dragon.vy*k;dragon.phase+=dt*10;
+    const px=player.x+player.w/2,py=player.y+player.h/2;
+    if(Math.abs(px-dragon.x)<43&&Math.abs(py-dragon.y)<34){finish();return}
+    if(dragon.x<-160||dragon.x>W+160||dragon.y-cam<-150)dragon=null;
   }
 
   if(player.y-cam>H+65)finish();
@@ -226,64 +351,153 @@ function background(){
 function drawP(p){
   let yy=p.y-cam;if(yy<-40||yy>H+30)return;
   let palettes={
-    normal:{plain:['#68747b','#303a40'],normal:['#15191d','#080a0c'],hell:['#e04432','#741b18'],minecraft:['#64b94e','#285b2b'],spring:['#65b9a4','#286d63'],rocket:['#e5a13c','#984d1b'],down:['#927bb0','#49385f'],moving:['#6c9dc1','#345d7c']},
-    hell:{plain:['#e66b35','#7b241b'],normal:['#15191d','#080a0c'],hell:['#e04432','#741b18'],minecraft:['#64b94e','#285b2b'],spring:['#ffb34a','#8c4b20'],rocket:['#ffd05a','#9b351d'],down:['#a64c50','#51202a'],moving:['#d66a42','#6b241d']},
-    minecraft:{plain:['#75b95a','#3c7139'],normal:['#15191d','#080a0c'],hell:['#e04432','#741b18'],minecraft:['#64b94e','#285b2b'],spring:['#65b9a4','#286d63'],rocket:['#e5a13c','#984d1b'],down:['#927bb0','#49385f'],moving:['#6c9dc1','#345d7c']}
+    normal:{normal:['#252a30','#101317'],hell:['#c52e38','#5a151d'],minecraft:['#6d9d4c','#345c2d'],spring:['#65b9a4','#286d63'],rocket:['#e5a13c','#984d1b'],down:['#927bb0','#49385f'],moving:['#6c9dc1','#345d7c']},
+    hell:{normal:['#c52e38','#5a151d'],hell:['#c52e38','#5a151d'],minecraft:['#6d9d4c','#345c2d'],spring:['#ffb34a','#8c4b20'],rocket:['#ffd05a','#9b351d'],down:['#a64c50','#51202a'],moving:['#d66a42','#6b241d']},
+    minecraft:{normal:['#6d9d4c','#345c2d'],hell:['#c52e38','#5a151d'],minecraft:['#6d9d4c','#345c2d'],spring:['#65b9a4','#286d63'],rocket:['#e5a13c','#984d1b'],down:['#927bb0','#49385f'],moving:['#6c9dc1','#345d7c']}
   };
-  let a=palettes[biome][p.type]||palettes[biome].plain;
+  // Чёрная обычная платформа остаётся чёрной при любом активном биоме.
+  // Только hell рисуется красной, minecraft — зелёной.
+  let a = p.type==='normal' ? palettes[biome].normal
+        : p.type==='hell' ? palettes.normal.hell
+        : p.type==='minecraft' ? palettes.normal.minecraft
+        : (palettes[biome][p.type]||palettes[biome].normal);
   x.fillStyle=a[1];x.fillRect(p.x,yy+5,p.w,p.h);
   x.fillStyle=a[0];x.fillRect(p.x,yy,p.w,p.h-5);
-  if(p.passed){x.strokeStyle='#fff2a6';x.lineWidth=2;x.strokeRect(p.x+1,yy+1,p.w-2,p.h-2);}
   if(p.type==='minecraft'){x.fillStyle='#a5ce72';for(let i=0;i<p.w;i+=20)x.fillRect(p.x+i,yy,10,5);}
   if(p.type==='spring'){x.strokeStyle='white';x.lineWidth=3;x.beginPath();x.moveTo(p.x+p.w/2,yy);x.lineTo(p.x+p.w/2-7,yy-9);x.lineTo(p.x+p.w/2+7,yy-17);x.stroke();}
   if(p.type==='rocket'){x.fillStyle='#e84c35';x.fillRect(p.x+p.w/2-8,yy-20,16,20);x.fillStyle='#ffe08a';x.fillRect(p.x+p.w/2-4,yy-28,8,9);}
   if(p.type==='down'){x.fillStyle='white';x.font='bold 18px Arial';x.fillText('↓',p.x+p.w/2-5,yy-4);}
-  if(p.coinSpawn&&!p.coinTaken){
+  if(!p.coinTaken){
     let cx=p.x+p.w/2,cy=yy-25;
     x.fillStyle='#9b681b';x.beginPath();x.arc(cx,cy+2,10,0,Math.PI*2);x.fill();
     x.fillStyle='#ffd84d';x.beginPath();x.arc(cx,cy,9,0,Math.PI*2);x.fill();
     x.fillStyle='#fff3a6';x.fillRect(cx-2,cy-5,3,10);
   }
 }
+
+function drawDragon(){
+ if(!dragon)return;
+ const dx=dragon.x,dy=dragon.y-cam,flap=Math.sin(dragon.phase)*13;
+ x.save();x.translate(dx,dy);
+ x.fillStyle='#251b48';x.beginPath();x.moveTo(-10,-5);x.lineTo(-48,-28-flap);x.lineTo(-38,5);x.lineTo(-13,12);x.fill();
+ x.beginPath();x.moveTo(10,-5);x.lineTo(48,-28+flap);x.lineTo(38,5);x.lineTo(13,12);x.fill();
+ x.fillStyle='#44265f';x.fillRect(-19,-12,38,24);x.fillRect(-12,-21,24,15);
+ x.fillStyle='#6b3a8b';x.fillRect(-13,-23,26,9);x.fillRect(-17,-17,34,6);
+ x.fillStyle='#f3d75b';x.fillRect(-10,-17,5,4);x.fillRect(5,-17,5,4);
+ x.fillStyle='#251b48';x.fillRect(-7,-5,14,9);
+ x.fillStyle='#38204f';x.fillRect(-4,9,8,20);x.fillRect(-23,2,8,15);x.fillRect(15,2,8,15);
+ x.fillRect(14,-4,30,5);x.fillRect(39,-7,8,7);
+ x.restore();
+}
+
 function draw(){background();plats.forEach(drawP);
-  if(boost){x.save();x.strokeStyle='#fff2a6aa';x.setLineDash([7,8]);x.lineWidth=2;x.beginPath();x.moveTo(player.x+player.w/2,player.y-cam+(boost.direction==='up'?0:player.h));x.lineTo(player.x+player.w/2,player.y-cam+(boost.direction==='up'?-150:150));x.stroke();x.restore();}
-  if(explosion){let q=Math.min(1,explosion.age/.42),ey=explosion.y-cam;x.fillStyle=`rgba(255,120,20,${1-q})`;x.beginPath();x.arc(explosion.x,ey,18+q*42,0,Math.PI*2);x.fill();x.fillStyle=`rgba(255,235,120,${1-q})`;x.beginPath();x.arc(explosion.x,ey,9+q*20,0,Math.PI*2);x.fill();}
   if(mob&&mob.active){
     let my=mob.y-cam;
     if(my>-60&&my<H+60){
-      let mx=mob.x,face=mob.side===0?1:-1;x.fillStyle='#251515';x.beginPath();x.arc(mx,my,27,0,Math.PI*2);x.fill();
-      x.fillStyle='#a93422';x.beginPath();x.arc(mx,my,21,0,Math.PI*2);x.fill();
-      x.fillStyle='#ffe36b';x.fillRect(mx+face*7-2,my-7,5,5);x.fillRect(mx+face*7-2,my+5,5,5);
-      x.fillStyle='#35120e';x.fillRect(mx+face*13-3,my-2,7,4);
+      x.fillStyle='#251515';x.beginPath();x.arc(8,my,27,0,Math.PI*2);x.fill();
+      x.fillStyle='#a93422';x.beginPath();x.arc(12,my,21,0,Math.PI*2);x.fill();
+      x.fillStyle='#ffe36b';x.fillRect(16,my-7,5,5);x.fillRect(16,my+5,5,5);
+      x.fillStyle='#35120e';x.fillRect(24,my-2,7,4);
     }
     for(let f of fireballs){let fy=f.y-cam;x.fillStyle='#ff6a20';x.beginPath();x.arc(f.x,fy,f.r,0,Math.PI*2);x.fill();x.fillStyle='#ffe36b';x.beginPath();x.arc(f.x,fy,4,0,Math.PI*2);x.fill();}
   }
-  if(player){let yy=player.y-cam;let body=localStorage.skyJumper==='red'?'#c94b4b':localStorage.skyJumper==='blue'?'#438bd0':'#34434b';x.fillStyle=body;x.fillRect(player.x+5,yy+9,24,30);x.fillStyle='#e8eef0';x.fillRect(player.x+7,yy,20,19);
-  if(localStorage.skyHat==='1'){x.fillStyle='#d94c3f';x.fillRect(player.x+5,yy-5,24,6);x.fillRect(player.x+9,yy-12,16,8);}if(localStorage.skyGlasses==='1'){x.fillStyle='#202b35';x.fillRect(player.x+8,yy+6,18,5);}x.fillStyle='#26343b';x.fillRect(player.x+11,yy+7,4,4);x.fillRect(player.x+21,yy+7,4,4);x.fillStyle='#f4bd8f';x.fillRect(player.x+10,yy+20,15,10);let trail=localStorage.skyTrailColor||'';let trailColor=trail==='gold'?'#ffd84d':trail==='gray'?'#aeb8bd':trail==='neon'?'#43f5e8':trail==='purple'?'#c77dff':'';if(trailColor){x.fillStyle=trailColor;x.globalAlpha=.75;x.fillRect(player.x+8,yy+39,7,13);x.fillRect(player.x+20,yy+39,7,13);x.globalAlpha=.4;x.fillRect(player.x+10,yy+51,5,8);x.fillRect(player.x+22,yy+51,5,8);x.globalAlpha=1;}
-  if(boost&&boost.direction==='down'){x.fillStyle='#78dfff';x.globalAlpha=.8;x.fillRect(player.x+7,yy-12,5,16);x.fillRect(player.x+22,yy-18,5,22);x.fillRect(player.x+14,yy-25,5,20);x.globalAlpha=1;}
-  if(player.vy< -15){x.fillStyle='#ff9b32';x.fillRect(player.x+13,yy+40,9,17)}}}
-function loop(t){if(!playing)return;let dt=(t-last)/1000||.016;last=t;update(dt);draw();if(playing&&!paused)requestAnimationFrame(loop)}
+  if(player){
+   let yy=player.y-cam,px=player.x,kind=storage.skyCostume||'starter';
+   x.fillStyle='#e8b58c';x.fillRect(px+8,yy,18,17);
+   x.fillStyle='#25343b';x.fillRect(px+10,yy+6,3,3);x.fillRect(px+21,yy+6,3,3);
+   x.fillStyle='#6a392b';x.fillRect(px+7,yy-3,20,5);
+   let shirt='#42a5d9',pants='#34434b';
+   if(kind==='formal'){shirt='#f2f2ed';pants='#202a35'}
+   if(kind==='sport'){shirt='#e34e4e';pants='#263e69'}
+   if(kind==='army'){shirt='#687b43';pants='#455333'}
+   if(kind==='steve'){shirt='#2875ad';pants='#76502f'}
+   x.fillStyle=shirt;x.fillRect(px+7,yy+17,20,17);
+   x.fillStyle=kind==='formal'?'#26313d':shirt;x.fillRect(px+2,yy+19,6,13);x.fillRect(px+26,yy+19,6,13);
+   if(kind==='formal'){x.fillStyle='#b52e39';x.fillRect(px+16,yy+18,3,13);x.fillStyle='#e6e6e6';x.fillRect(px+15,yy+18,5,4)}
+   if(kind==='army'){x.fillStyle='#a2a86a';for(let q=0;q<3;q++)x.fillRect(px+9+q*6,yy+20+(q%2)*6,4,4)}
+   if(kind==='steve'){x.fillStyle='#6b4329';x.fillRect(px+8,yy+2,18,5)}
+   x.fillStyle=pants;x.fillRect(px+8,yy+34,7,12);x.fillRect(px+19,yy+34,7,12);
+   if(equipped('glasses')){x.fillStyle='#17232a';x.fillRect(px+7,yy+6,9,5);x.fillRect(px+18,yy+6,9,5);x.fillRect(px+15,yy+7,4,2)}
+   if(equipped('cap')){x.fillStyle='#d84a38';x.fillRect(px+6,yy-5,23,5);x.fillRect(px+23,yy-2,9,3)}
+   if(equipped('crown')){x.fillStyle='#ffd447';x.fillRect(px+9,yy-10,17,5);x.fillRect(px+9,yy-14,4,5);x.fillRect(px+15,yy-17,4,8);x.fillRect(px+22,yy-14,4,5)}
+   if(equipped('scarf')){x.fillStyle='#e04e67';x.fillRect(px+7,yy+16,21,5);x.fillRect(px+23,yy+20,5,12)}
+   let trail=equipped('rainbow')?['#ff4d6d','#ffd84d','#43f5e8','#a66bff'][Math.floor(performance.now()/120)%4]:equipped('ice')?'#8cecff':equipped('shadow')?'#6840a5':equipped('leaf')?'#54d66b':equipped('gold')?'#ffd84d':equipped('neon')?'#43f5e8':equipped('fire')?'#ff6b32':equipped('trail')?'#aeb8bd':null;
+   if(trail){x.fillStyle=trail;x.fillRect(px+1,yy+35,5,12);x.fillRect(px+28,yy+35,5,12)}
+   if(player.vy< -15){x.fillStyle='#ff9b32';x.fillRect(px+13,yy+44,9,15)}
+  }
+  if(dragon)drawDragon();}
+function scheduleLoop(id){if(rafPending||!playing||paused)return;rafPending=true;requestAnimationFrame(t=>{rafPending=false;if(id!==loopId||!playing||paused)return;loop(t,id)})}
+ function loop(t,id){if(id!==loopId||!playing||paused)return;let dt=Math.min((t-last)/1000||.016,.032);last=t;update(dt);draw();scheduleLoop(id)}
 function hold(id,key){let el=$(id);el.addEventListener('pointerdown',e=>{e.preventDefault();keys[key]=true;el.setPointerCapture(e.pointerId)});['pointerup','pointercancel','lostpointercapture'].forEach(ev=>el.addEventListener(ev,()=>keys[key]=false))}
 hold('left','l');hold('right','r');
-onkeydown=e=>{if(e.key==='ArrowLeft'||e.key==='a')keys.l=true;if(e.key==='ArrowRight'||e.key==='d')keys.r=true;if(e.key==='Escape'&&playing){paused=true;screen('pauseScreen')}};
-onkeyup=e=>{if(e.key==='ArrowLeft'||e.key==='a')keys.l=false;if(e.key==='ArrowRight'||e.key==='d')keys.r=false};
-$('play').onclick=start;$('pause').onclick=()=>{paused=true;screen('pauseScreen')};$('resume').onclick=()=>{paused=false;last=performance.now();screens.forEach(s=>$(s).classList.add('hide'));requestAnimationFrame(loop)};
-$('toMenu').onclick=()=>{playing=false;paused=false;$('hud').classList.add('hide');$('controls').classList.add('hide');$('pause').classList.add('hide');menuInfo();screen('menu')};
+window.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A'){keys.l=true;e.preventDefault()}if(e.key==='ArrowRight'||e.key==='d'||e.key==='D'){keys.r=true;e.preventDefault()}if(e.key==='Escape'&&playing&&!paused){paused=true;keys.l=false;keys.r=false;screen('pauseScreen')}});
+window.addEventListener('keyup',e=>{if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A')keys.l=false;if(e.key==='ArrowRight'||e.key==='d'||e.key==='D')keys.r=false});
+document.addEventListener('pointerdown',()=>{if(!$('menu').classList.contains('hide'))startMenuMusic()},{once:true});
+document.addEventListener('pointerdown',()=>{if(!$('menu').classList.contains('hide'))startMenuMusic()});
+$('play').onclick=()=>{playSfx('click');start()};$('pause').onclick=()=>{if(!playing||paused)return;playSfx('click');paused=true;keys.l=false;keys.r=false;screen('pauseScreen')};$('resume').onclick=()=>{if(!playing)return;paused=false;keys.l=false;keys.r=false;last=performance.now();screens.forEach(s=>$(s).classList.add('hide'));scheduleLoop(loopId)};
+$('toMenu').onclick=()=>{playing=false;paused=false;loopId++;rafPending=false;keys.l=false;keys.r=false;stopMenuMusic();$('hud').classList.add('hide');$('controls').classList.add('hide');$('pause').classList.add('hide');menuInfo();screen('menu')};
 $('again').onclick=start;$('overMenu').onclick=()=>{menuInfo();screen('menu')};
 $('shopOpen').onclick=()=>{menuInfo();screen('shop')};$('shopBack').onclick=()=>screen('menu');
 $('nickOpen').onclick=()=>{$('nickInput').value=nick==='Игрок'?'':nick;screen('nick')};$('nickBack').onclick=()=>screen('menu');
-$('saveNick').onclick=()=>{nick=$('nickInput').value.trim()||'Игрок';localStorage.skyNick=nick;menuInfo();screen('menu')};
-const catalog={buyBlue:{cost:60,key:'jumperBlue',equip:()=>localStorage.skyJumper='blue'},buyRed:{cost:60,key:'jumperRed',equip:()=>localStorage.skyJumper='red'},buyHat:{cost:40,key:'hat',equip:()=>localStorage.skyHat='1'},buyGlasses:{cost:40,key:'glasses',equip:()=>localStorage.skyGlasses='1'},buyGray:{cost:20,key:'trailGray',equip:()=>localStorage.skyTrailColor='gray'},buyGold:{cost:50,key:'trailGold',equip:()=>localStorage.skyTrailColor='gold'},buyNeon:{cost:100,key:'trailNeon',equip:()=>localStorage.skyTrailColor='neon'},buyPurple:{cost:80,key:'trailPurple',equip:()=>localStorage.skyTrailColor='purple'}};
-Object.entries(catalog).forEach(([id,item])=>{$(id).onclick=()=>{let owned=localStorage['owned_'+item.key]==='1';if(!owned){if(coins<item.cost){say('Не хватает монет');return;}coins-=item.cost;localStorage.skyCoins=coins;localStorage['owned_'+item.key]='1';}item.equip();menuInfo();say(owned?'Предмет выбран!':'Куплено и надето!');};});
-$('newsOpen').onclick=()=>screen('newsPanel');$('newsBack').onclick=()=>screen('menu');menuInfo();draw();
+$('saveNick').onclick=()=>{nick=$('nickInput').value.trim()||'Игрок';storage.skyNick=nick;menuInfo();screen('menu')};
+let shopTab='costumes';
+function renderShop(){
+ $('shopCoins').textContent=coins;
+ document.querySelectorAll('.shop-tabs button').forEach(b=>b.classList.toggle('active',b.dataset.tab===shopTab));
+ const host=$('shopItems');host.innerHTML='';
+ inventory[shopTab].forEach(item=>{
+  const isOwned=owned(item.id),isOn=shopTab==='accessories'||shopTab==='trails'?equipped(item.id):storage.skyCostume===item.id;
+  const card=document.createElement('div');card.className='shop-card';
+  card.innerHTML=`<div class="shop-preview">${item.icon}</div><b>${item.name}</b><small>${item.desc}</small><small>${item.price?item.price+' 🪙':'Бесплатно'}</small>`;
+  const btn=document.createElement('button');
+  btn.textContent=isOn?'НАДЕТО':isOwned?'НАДЕТЬ': 'КУПИТЬ';
+  btn.className=isOn?'primary':'';
+  btn.onclick=()=>{
+   if(!owned(item.id)){
+    if(coins<item.price){say('Не хватает монет');return}
+    coins-=item.price;storage.skyCoins=coins;storage['skyOwn_'+item.id]='1';
+   }
+   if(shopTab==='costumes'){storage.skyCostume=item.id}
+   else storage['skyWear_'+item.id]=equipped(item.id)?'0':'1';
+   menuInfo();renderShop();
+  };
+  card.appendChild(btn);host.appendChild(card);
+ });
+}
+document.querySelectorAll('.shop-tabs button').forEach(b=>b.onclick=()=>{shopTab=b.dataset.tab;renderShop()});
+$('shopOpen').onclick=()=>{menuInfo();renderShop();screen('shop')};
+$('shopBack').onclick=()=>screen('menu');
+$('newsBtn').onclick=()=>screen('newsScreen');$('newsBack').onclick=()=>screen('menu');
+$('donateBtn').onclick=()=>screen('donateScreen');$('donateBack').onclick=()=>screen('menu');
+function syncSoundSettings(){
+ $('musicVolume').value=Math.round(musicVolume*100);$('musicValue').textContent=Math.round(musicVolume*100)+'%';
+ $('sfxVolume').value=Math.round(sfxVolume*100);$('sfxValue').textContent=Math.round(sfxVolume*100)+'%';
+ if(musicGain&&menuAudio)musicGain.gain.setTargetAtTime(musicVolume,menuAudio.currentTime,.03);
+ if(sfxGain&&menuAudio)sfxGain.gain.setTargetAtTime(sfxVolume,menuAudio.currentTime,.03);
+}
+$('settingsOpen').onclick=()=>{syncSoundSettings();screen('settingsScreen')};
+$('settingsBack').onclick=()=>screen('menu');
+$('musicVolume').oninput=e=>{musicVolume=Number(e.target.value)/100;storage.skyMusicVolume=String(e.target.value);$('musicValue').textContent=e.target.value+'%';if(musicGain&&menuAudio)musicGain.gain.setTargetAtTime(musicVolume,menuAudio.currentTime,.03)};
+$('sfxVolume').oninput=e=>{sfxVolume=Number(e.target.value)/100;storage.skySfxVolume=String(e.target.value);$('sfxValue').textContent=e.target.value+'%';if(sfxGain&&menuAudio)sfxGain.gain.setTargetAtTime(sfxVolume,menuAudio.currentTime,.03)};
+document.addEventListener('visibilitychange',()=>{
+ if(document.hidden){stopMenuMusic();if(menuAudio&&menuAudio.state==='running')menuAudio.suspend().catch(()=>{});}
+ else {if(menuAudio&&menuAudio.state==='suspended')menuAudio.resume().catch(()=>{});if(!$('menu').classList.contains('hide')||!$('settingsScreen').classList.contains('hide'))startMenuMusic();}
+});
+window.addEventListener('pagehide',stopMenuMusic);
+window.addEventListener('pageshow',()=>{if(!document.hidden&&!$('menu').classList.contains('hide'))startMenuMusic()});
+if(!storage.skyCostume)storage.skyCostume='starter';
+ syncSoundSettings();menuInfo();renderShop();draw();
+ document.addEventListener('contextmenu',e=>{if(e.target.closest('#controls'))e.preventDefault()});
+ window.addEventListener('blur',()=>{keys.l=false;keys.r=false;if(playing&&!paused){paused=true;screen('pauseScreen')}});
 
- // Регистрация офлайн-кэша. Работает на HTTPS или localhost.
- if ('serviceWorker' in navigator) {
-   window.addEventListener('load', () => {
-     navigator.serviceWorker.register('./sw.js').catch(err =>
-       console.log('Service worker:', err)
-     );
-   });
- }
 })();
-</script></body></html>
+
+// Регистрация обновлённого офлайн-кэша SKYBOUND.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(err => {
+      console.log('Service worker:', err);
+    });
+  });
+}
+\n</script></body></html>
